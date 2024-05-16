@@ -1,7 +1,7 @@
 Metadata-Version: 2.1
 Name: BigEDA
-Version: 0.0.6
-Summary: This is a package to carry out Exploratory Data Analysis, allowing to work on Big Data.
+Version: 0.0.7
+Summary: This is a package to carry out Exploratory Data Analysis, allowing to work with Big Data.
 Home-page: https://github.com/FabioScielzoOrtiz/EDA_Package
 Author: Fabio Scielzo Ortiz
 Author-email: fabioscielzo98@gmail.com
