@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="BigEDA",
-    version="0.0.7",
+    version="0.0.8",
     author="Fabio Scielzo Ortiz",
     author_email="fabioscielzo98@gmail.com",
     description="This is a package to carry out Exploratory Data Analysis, allowing to work with Big Data.",
@@ -18,6 +18,7 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    install_requires=['pandas','numpy'],
+    install_requires=['pandas','numpy', 'polars', 'scipy', 'itertools', 
+                      'collections', 'seaborn', 'matplotlib', 'random'],
     python_requires=">=3.7"
 )

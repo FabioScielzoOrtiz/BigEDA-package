@@ -258,7 +258,7 @@ def freq_table(X, intervals=None) :
 
 ######################################################################################################################
 
-def summary(df, auto_col=True, quant_col_names=[], cat_col_names=[]) :
+def summary(df, auto_col=False, quant_col_names=[], cat_col_names=[]) :
 
     if auto_col == True :
         quant_col_names = columns_names(df, types=[pl.Float64, pl.Int64])
@@ -589,7 +589,7 @@ def contingency_table_3D(df, cat1_name, cat2_name, cat3_name, conditional=False,
 
 ######################################################################################################################
 
-def cov_matrix(df, auto_col=True, quant_col_names=None) :
+def cov_matrix(df, auto_col=False, quant_col_names=None) :
 
     if auto_col == True :
         quant_col_names = columns_names(df, types=[pl.Float64, pl.Int64])
@@ -610,7 +610,7 @@ def cov_matrix(df, auto_col=True, quant_col_names=None) :
 
 ######################################################################################################################
 
-def corr_matrix(df, auto_col=True, quant_col_names=None, response=None, predictors=None, method='pearson') :
+def corr_matrix(df, auto_col=False, quant_col_names=None, response=None, predictors=None, method='pearson') :
 
     if response != None and predictors != None : 
 
@@ -643,7 +643,7 @@ def corr_matrix(df, auto_col=True, quant_col_names=None, response=None, predicto
 
 ######################################################################################################################
     
-def high_corr(df, upper, lower, auto_col=True, quant_col_names=None, method='pearson'):
+def high_corr(df, upper, lower, auto_col=False, quant_col_names=None, method='pearson'):
 
     if auto_col == True :
         quant_col_names = columns_names(df, types=[pl.Float64, pl.Int64])
