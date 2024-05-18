@@ -756,7 +756,7 @@ def barplot_interactive(X, figsize=(800,600), font_family='Comic Sans MS', font_
         gridcolor='white'
     )
 
-    fig.show()
+    return fig
 
 ######################################################################################################################
 
