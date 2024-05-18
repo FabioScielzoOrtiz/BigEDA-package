@@ -650,7 +650,7 @@ def barplot_matrix(df, n_cols, title, figsize=(15,15), auto_col=False,
        
         X = df[col].drop_nulls().to_numpy()
         unique_values, rel_freq = get_frequencies(X)
-        sorted_idx = np.argsort(rel_freq)
+        sorted_idx = np.argsort(-rel_freq)
         unique_values = unique_values[sorted_idx]
         rel_freq = rel_freq[sorted_idx]
         unique_values = [str(x) for x in unique_values]           
