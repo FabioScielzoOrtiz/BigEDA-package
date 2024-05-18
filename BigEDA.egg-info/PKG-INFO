@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: BigEDA
-Version: 0.0.8
+Version: 0.0.9
 Summary: This is a package to carry out Exploratory Data Analysis, allowing to work with Big Data.
 Home-page: https://github.com/FabioScielzoOrtiz/EDA_Package
 Author: Fabio Scielzo Ortiz
@@ -13,6 +13,13 @@ Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: pandas
 Requires-Dist: numpy
+Requires-Dist: polars
+Requires-Dist: scipy
+Requires-Dist: itertools
+Requires-Dist: collections
+Requires-Dist: seaborn
+Requires-Dist: matplotlib
+Requires-Dist: random
 
 This is a package to carry out Exploratory Data Analysis, allowing to work on Big Data.
 

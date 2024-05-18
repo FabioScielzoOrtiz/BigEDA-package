@@ -184,12 +184,12 @@ def histogram_matrix(df, bins, n_cols, title, figsize=(15,15), auto_col=False,
 def boxplot(X, color, figsize=(9,5), n_xticks=15, x_rotation=0, statistics=None, 
             random=False, n=None, fraction=None, seed=123, save=False, file_name=None,
             style='whitegrid', lines_width=0.55, bbox_to_anchor=(0.5,-0.5), legend_size=10,
-              color_stats=None) :
+            color_stats=None) :
 
     """
     Parameters (inputs)
     ----------
-    X: a pandas series or a numpy array (the variable).
+    X: a polars series (the variable).
     bins: number of intervals used to create the histogram (number of bars).
     color: name of the color to be use for the histogram bars.
     figsize: dimensions of the plot. Must be a pair of numbers (a,b), where a indicates the plot width, and b the length.
@@ -526,16 +526,17 @@ def ecdfplot_matrix(df, n_cols, title, complementary=False, figsize=(15,15), aut
 
 ######################################################################################################################
 
-def barplot(X, color, categories_order=None, figsize=(9,5), xticks_rotation=0, random=False, 
+def barplot(X, color, orientation='vertical', bar_width=0.5, order=None, figsize=(9,5), xticks_rotation=0, random=False, 
             n=None, fraction=None, seed=123, fontsize=10, y_up_limit=1, 
-            y_low_limit=0, xticks_fontsize=11, yticks_fontsize=11, xlabel_size=11, 
-            ylabel_size=11, ylabel='Relative Frequency', xlabel='',
-            title_size=14, title_weight='bold') :
+            y_low_limit=0, xticks_fontsize=11, yticks_fontsize=11, 
+            ylabel_size=11, ylabel='Relative Frequency', 
+            xlabel_size=11, xlabel='', 
+            title_size=14, title_weight='bold'):
 
     """
     Parameters (inputs)
     ----------
-    X: a pandas series or a numpy array (the variable).
+    X: a polars series.
     color: name of the color to be use for the histogram bars.
     categories_order: a list with X categories order as they will appear in the plot.
     figsize: dimensions of the plot. Must be a pair of numbers (a,b), where a indicates the plot width, and b the length.
@@ -560,9 +561,13 @@ def barplot(X, color, categories_order=None, figsize=(9,5), xticks_rotation=0, r
     # Setting the figure size.
     fig, axs = plt.subplots(figsize=figsize)
 
-    # Computing the barplot.
-    value_counts = X.value_counts(normalize=True).reindex(categories_order)
-    ax = value_counts.plot(kind='bar', color=color)
+    X = X.drop_nulls().to_numpy()
+    unique_values, rel_freq = get_frequencies(X)
+    unique_values = [str(x) for x in unique_values] 
+    if orientation == 'vertical':
+        ax = sns.barplot(x=unique_values, y=rel_freq, color=color, width=bar_width, order=order)
+    elif orientation == 'horizontal':
+        ax = sns.barplot(x=rel_freq, y=unique_values, color=color, width=bar_width, order=order)
 
     ax.set_ylabel(ylabel, size=ylabel_size)
     ax.set_xlabel(xlabel, size=xlabel_size)
@@ -574,7 +579,7 @@ def barplot(X, color, categories_order=None, figsize=(9,5), xticks_rotation=0, r
     ax.set_ylim(y_low_limit, y_up_limit)  
 
     # Add text annotations to each bar
-    for i, v in enumerate(value_counts):
+    for i, v in enumerate(rel_freq):
         plt.text(i, v, f"{v:.2f}", color='black', ha='center', va='bottom', fontsize=fontsize, fontweight='bold')
 
     plt.show()
