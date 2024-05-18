@@ -220,7 +220,7 @@ def freq_table(X, intervals=None) :
 
     if intervals == None:
         unique_values, counts = np.unique(X, return_counts=True)
-        sorted_indices = np.argsort(counts)
+        sorted_indices = np.argsort(-counts) 
         sorted_intervals = unique_values[sorted_indices]
         counts = counts[sorted_indices]
         rel_counts = counts / len(X)

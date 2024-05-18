@@ -650,9 +650,11 @@ def barplot_matrix(df, n_cols, title, figsize=(15,15), auto_col=False,
        
         X = df[col].drop_nulls().to_numpy()
         unique_values, rel_freq = get_frequencies(X)
+        sorted_idx = np.argsort(rel_freq)
+        unique_values = unique_values[sorted_idx]
+        rel_freq = rel_freq[sorted_idx]
         unique_values = [str(x) for x in unique_values]           
-        #proportions = X.value_counts(normalize=True).sort_index()
-        #value_counts.plot(kind='bar', color=color, ax=ax)
+
         if orientation == 'vertical':
             sns.barplot(x=unique_values, y=rel_freq, color=color, width=bar_width, order=order[col], ax=axes[i])
             axes[i].set_xlabel(col, size=xlabel_size)
@@ -688,8 +690,11 @@ def barplot_matrix(df, n_cols, title, figsize=(15,15), auto_col=False,
 
 ######################################################################################################################
 
-def barplot_interactive(X, figsize=(800,600), font_family='Comic Sans MS', font_size=15, color='tomato', categories_order=None,
-                        margin_l=50, margin_r=40, margin_t=60, margin_b=50):
+def barplot_interactive(X, figsize=(800,600), font_family='Comic Sans MS', title_size=20, 
+                        xlabel_size=12, ylabel_size=12, xticks_size=10, yticks_size=10, 
+                        color='tomato', categories_order=None,
+                        margin_l=50, margin_r=40, margin_t=60, margin_b=50, 
+                        title_width=0.5, title_height=0.95):
 
     X_np = X.drop_nulls().to_numpy()
     unique_values, rel_freq = get_frequencies(X_np)
@@ -714,23 +719,42 @@ def barplot_interactive(X, figsize=(800,600), font_family='Comic Sans MS', font_
         height=figsize[1]  # height of the plot in pixels
     )
 
+    # Update layout for axis titles
     fig.update_layout(
-        xaxis_title='Percentage',
-        yaxis_title=X.name
+        xaxis_title=dict(
+            text='Percentage',
+            font=dict(
+                family=font_family,
+                size=xlabel_size,
+                color="black"
+            )
+        ),
+        yaxis_title=dict(
+            text=X.name,
+            font=dict(
+                family=font_family,
+                size=ylabel_size,
+                color="black"
+            )
+        )
     )
 
     fig.update_layout(
-        title={
-            'text': f'<b>Barplot - {X.name}<b>',
-            'x':0.5,
-            'xanchor': 'center',
-            'yanchor': 'top',
-        },
-        font=dict(
-            family=font_family,
-            size=font_size,
-            color="black",
-        )
+        annotations=[
+            dict(
+                text=f'<b>Barplot - {X.name}<b>',
+                x=title_width,
+                y=title_height,
+                xref='paper',
+                yref='paper',
+                showarrow=False,
+                font=dict(
+                    family=font_family,
+                    size=title_size,
+                    color="black"
+                )
+            )
+        ]
     )
 
     fig.update_layout(
@@ -746,7 +770,12 @@ def barplot_interactive(X, figsize=(800,600), font_family='Comic Sans MS', font_
         ticks='outside',
         showline=True,
         linecolor='black',
-        gridcolor='lightgrey'
+        gridcolor='lightgrey',
+        tickfont=dict(
+            family=font_family,
+            size=xticks_size,
+            color='black'
+        )
     )
 
     fig.update_yaxes(
@@ -754,7 +783,14 @@ def barplot_interactive(X, figsize=(800,600), font_family='Comic Sans MS', font_
         ticks='outside',
         showline=True,
         linecolor='black',
-        gridcolor='white'
+        gridcolor='white',
+        automargin=True,
+        title_standoff=20,  # Increase this value to add more space between y-axis label and ticks
+        tickfont=dict(
+            family=font_family,
+            size=yticks_size,
+            color='black'
+        )
     )
 
     return fig
