@@ -575,8 +575,9 @@ def barplot(X, color, orientation='vertical', bar_width=0.5, order=None, figsize
     plt.title(label = 'Bar-plot' + '  ' + X.name, fontsize=title_size, weight=title_weight)
 
     # Add text annotations to each bar
-    for i, v in enumerate(rel_freq):
-        plt.text(i, v, f"{v:.2f}", color='black', ha='center', va='bottom', fontsize=fontsize, fontweight='bold')
+    if orientation == 'vertical':
+        for i, v in enumerate(rel_freq):
+            plt.text(i, v, f"{v:.2f}", color='black', ha='center', va='bottom', fontsize=fontsize, fontweight='bold')
 
     plt.show()
 

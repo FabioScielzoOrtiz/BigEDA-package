@@ -5,7 +5,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from itertools import combinations, product
 import matplotlib.patches as mpatches
-
+import plotly.express as px
 
 from BigEDA.preprocessing import columns_names
 
@@ -526,12 +526,13 @@ def ecdfplot_matrix(df, n_cols, title, complementary=False, figsize=(15,15), aut
 
 ######################################################################################################################
 
-def barplot(X, color, orientation='vertical', bar_width=0.5, order=None, figsize=(9,5), xticks_rotation=0, random=False, 
-            n=None, fraction=None, seed=123, fontsize=10,  
+def barplot(X, color, orientation='vertical', bar_width=0.5, order=None, 
+            figsize=(9,5), xticks_rotation=0, random=False, 
+            n=None, fraction=None, seed=123, annotations_fontsize=10,  
             xticks_fontsize=11, yticks_fontsize=11, 
             ylabel_size=11, ylabel='Relative Frequency', 
             xlabel_size=11, xlabel='', 
-            title_size=14, title_weight='bold'):
+            title_size=14, title_weight='bold', text_annotations=True):
 
     """
     Parameters (inputs)
@@ -572,12 +573,12 @@ def barplot(X, color, orientation='vertical', bar_width=0.5, order=None, figsize
     plt.yticks(fontsize=yticks_fontsize)
 
     # Setting the title of the plot.
-    plt.title(label = 'Bar-plot' + '  ' + X.name, fontsize=title_size, weight=title_weight)
+    plt.title(label = 'Barplot' + '  ' + X.name, fontsize=title_size, weight=title_weight)
 
     # Add text annotations to each bar
-    if orientation == 'vertical':
+    if text_annotations == True and orientation == 'vertical':
         for i, v in enumerate(rel_freq):
-            plt.text(i, v, f"{v:.2f}", color='black', ha='center', va='bottom', fontsize=fontsize, fontweight='bold')
+            plt.text(i, v, f"{v:.2f}", color='black', ha='center', va='bottom', fontsize=annotations_fontsize, fontweight='bold')
 
     plt.show()
 
@@ -684,6 +685,78 @@ def barplot_matrix(df, n_cols, title, figsize=(15,15), auto_col=False,
         fig.savefig(file_name + '.jpg', format='jpg', dpi=500)
 
     plt.show()
+
+######################################################################################################################
+
+def barplot_interactive(X, figsize=(800,600), font_family='Comic Sans MS', font_size=15, color='tomato'):
+
+    X_np = X.drop_nulls().to_numpy()
+    unique_values, rel_freq = get_frequencies(X_np)
+    # sorting in descending order
+    sorted_idx = np.argsort(rel_freq)
+    unique_values = unique_values[sorted_idx]
+    rel_freq = rel_freq[sorted_idx]
+    rel_freq_perc = np.round(rel_freq*100, 2)
+    df_to_plot = pd.DataFrame({'Value': unique_values, 'Percentage': rel_freq_perc})
+
+    fig = px.bar(
+        df_to_plot,
+        y='Value',
+        x='Percentage',
+    )
+
+    # Set the bar color 
+    fig.update_traces(marker_color=color)
+
+    # Adjust the plot size
+    fig.update_layout(
+        width=figsize[0],  # width of the plot in pixels
+        height=figsize[1]  # height of the plot in pixels
+    )
+
+    fig.update_layout(
+        xaxis_title='Percentage',
+        yaxis_title=X.name
+    )
+
+    fig.update_layout(
+        title={
+            'text': f'<b>Barplot - {X.name}<b>',
+            'x':0.6,
+            'xanchor': 'center',
+            'yanchor': 'top',
+        },
+        font=dict(
+            family=font_family,
+            size=font_size,
+            color="black",
+        )
+    )
+
+    fig.update_layout(
+        margin=dict(l=50, r=40, t=60, b=50)
+    )
+
+    fig.update_layout(
+        plot_bgcolor='white'
+    )
+    fig.update_xaxes(
+        mirror=True,
+        ticks='outside',
+        showline=True,
+        linecolor='black',
+        gridcolor='lightgrey'
+    )
+
+    fig.update_yaxes(
+        mirror=True,
+        ticks='outside',
+        showline=True,
+        linecolor='black',
+        gridcolor='white'
+    )
+
+    fig.show()
 
 ######################################################################################################################
 
