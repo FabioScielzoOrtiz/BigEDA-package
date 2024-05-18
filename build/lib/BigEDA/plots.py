@@ -89,7 +89,7 @@ def histogram_matrix(df, bins, n_cols, title, figsize=(15,15), auto_col=False,
                      n_xticks=15, title_fontsize=15, subtitles_fontsize=11, save=False, 
                      file_name=None, random=False, n=None, fraction=None, seed=123, 
                      x_rotation=0, y_rotation=0, title_height=0.95, style='whitegrid', hspace=1, wspace=0.2,
-                     n_round_xticks=2, title_weight='bold', xlabel_size=11, ylabel_size=11, 
+                     n_round_xticks=2, title_weight='bold', subtitles_weight='bold', xlabel_size=11, ylabel_size=11, 
                      xticks_size=10, yticks_size=10) :
  
     """
@@ -154,7 +154,7 @@ def histogram_matrix(df, bins, n_cols, title, figsize=(15,15), auto_col=False,
         ax = axes[i]  # Get the current axis
         X = df.select(col).to_numpy().flatten()
         sns.histplot(data=X, stat="proportion", bins=bins, color=color, ax=ax)
-        ax.set_title(col, fontsize=subtitles_fontsize)
+        ax.set_title(col, fontsize=subtitles_fontsize, weight=subtitles_weight)
         min = np.floor(df[col].min())
         max = np.ceil(df[col].max())
         xticks = get_ticks(min, max, n_ticks=n_xticks, n_round=n_round_xticks)
@@ -180,7 +180,106 @@ def histogram_matrix(df, bins, n_cols, title, figsize=(15,15), auto_col=False,
     plt.show()  
 
 ######################################################################################################################
-    
+
+def histogram_interactive(X, figsize=(800,600), font_family='Comic Sans MS', title_size=20, 
+                          xlabel_size=12, ylabel_size=12, xticks_size=10, yticks_size=10, 
+                          color='tomato', nbins=10,
+                          margin_l=50, margin_r=40, margin_t=60, margin_b=50, 
+                          title_width=0.5, title_height=0.95):
+
+    X_np = X.drop_nulls().to_numpy()
+    df_to_plot = pd.DataFrame({'Value': X_np})
+
+    fig = px.histogram(df_to_plot, x='Value', nbins=nbins, histnorm='percent')
+
+    # Set the bar color
+    fig.update_traces(marker_color=color)
+
+    # Adjust the plot size
+    fig.update_layout(
+        width=figsize[0],  # width of the plot in pixels
+        height=figsize[1]  # height of the plot in pixels
+    )
+
+    # Update layout for axis titles
+    fig.update_layout(
+        xaxis_title=dict(
+            text='Value',
+            font=dict(
+                family=font_family,
+                size=xlabel_size,
+                color="black"
+            )
+        ),
+        yaxis_title=dict(
+            text='Percentage',
+            font=dict(
+                family=font_family,
+                size=ylabel_size,
+                color="black"
+            )
+        )
+    )
+
+    fig.update_layout(
+        annotations=[
+            dict(
+                text=f'<b>Histogram - {X.name}<b>',
+                x=title_width,
+                y=title_height,
+                xref='paper',
+                yref='paper',
+                showarrow=False,
+                font=dict(
+                    family=font_family,
+                    size=title_size,
+                    color="black"
+                )
+            )
+        ]
+    )
+
+    fig.update_layout(
+        margin=dict(l=margin_l, r=margin_r, t=margin_t, b=margin_b)
+    )
+
+    fig.update_layout(
+        plot_bgcolor='white'
+    )
+
+    fig.update_xaxes(
+        mirror=True,
+        ticks='outside',
+        showline=True,
+        linecolor='black',
+        gridcolor='lightgrey',
+        tickfont=dict(
+            family=font_family,
+            size=xticks_size,
+            color='black'
+        )
+    )
+
+    fig.update_yaxes(
+        mirror=True,
+        ticks='outside',
+        showline=True,
+        linecolor='black',
+        gridcolor='white',
+        automargin=True,
+        title_standoff=20,  # Increase this value to add more space between y-axis label and ticks
+        tickfont=dict(
+            family=font_family,
+            size=yticks_size,
+            color='black'
+        ),
+        tickformat='.2f'  # Round to 0 decimal places
+    )
+
+    return fig
+
+######################################################################################################################
+
 def boxplot(X, color, figsize=(9,5), n_xticks=15, x_rotation=0, statistics=None, 
             random=False, n=None, fraction=None, seed=123, save=False, file_name=None,
             style='whitegrid', lines_width=0.55, bbox_to_anchor=(0.5,-0.5), legend_size=10,
