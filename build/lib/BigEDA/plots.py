@@ -688,7 +688,8 @@ def barplot_matrix(df, n_cols, title, figsize=(15,15), auto_col=False,
 
 ######################################################################################################################
 
-def barplot_interactive(X, figsize=(800,600), font_family='Comic Sans MS', font_size=15, color='tomato'):
+def barplot_interactive(X, figsize=(800,600), font_family='Comic Sans MS', font_size=15, color='tomato', categories_order=None,
+                        margin_l=50, margin_r=40, margin_t=60, margin_b=50):
 
     X_np = X.drop_nulls().to_numpy()
     unique_values, rel_freq = get_frequencies(X_np)
@@ -699,11 +700,10 @@ def barplot_interactive(X, figsize=(800,600), font_family='Comic Sans MS', font_
     rel_freq_perc = np.round(rel_freq*100, 2)
     df_to_plot = pd.DataFrame({'Value': unique_values, 'Percentage': rel_freq_perc})
 
-    fig = px.bar(
-        df_to_plot,
-        y='Value',
-        x='Percentage',
-    )
+    if categories_order is not None:
+        fig = px.bar(df_to_plot, y='Value', x='Percentage', category_orders={"Value": categories_order})
+    else:
+        fig = px.bar(df_to_plot, y='Value', x='Percentage')
 
     # Set the bar color 
     fig.update_traces(marker_color=color)
@@ -722,7 +722,7 @@ def barplot_interactive(X, figsize=(800,600), font_family='Comic Sans MS', font_
     fig.update_layout(
         title={
             'text': f'<b>Barplot - {X.name}<b>',
-            'x':0.6,
+            'x':0.5,
             'xanchor': 'center',
             'yanchor': 'top',
         },
@@ -734,12 +734,13 @@ def barplot_interactive(X, figsize=(800,600), font_family='Comic Sans MS', font_
     )
 
     fig.update_layout(
-        margin=dict(l=50, r=40, t=60, b=50)
+        margin=dict(l=margin_l, r=margin_r, t=margin_t, b=margin_b)
     )
 
     fig.update_layout(
         plot_bgcolor='white'
     )
+
     fig.update_xaxes(
         mirror=True,
         ticks='outside',
@@ -756,7 +757,7 @@ def barplot_interactive(X, figsize=(800,600), font_family='Comic Sans MS', font_
         gridcolor='white'
     )
 
-    fig.show()
+    return fig
 
 ######################################################################################################################
 
