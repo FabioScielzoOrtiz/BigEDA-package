@@ -527,8 +527,8 @@ def ecdfplot_matrix(df, n_cols, title, complementary=False, figsize=(15,15), aut
 ######################################################################################################################
 
 def barplot(X, color, orientation='vertical', bar_width=0.5, order=None, figsize=(9,5), xticks_rotation=0, random=False, 
-            n=None, fraction=None, seed=123, fontsize=10, y_up_limit=1, 
-            y_low_limit=0, xticks_fontsize=11, yticks_fontsize=11, 
+            n=None, fraction=None, seed=123, fontsize=10,  
+            xticks_fontsize=11, yticks_fontsize=11, 
             ylabel_size=11, ylabel='Relative Frequency', 
             xlabel_size=11, xlabel='', 
             title_size=14, title_weight='bold'):
@@ -555,14 +555,11 @@ def barplot(X, color, orientation='vertical', bar_width=0.5, order=None, figsize
     if random == True :
         X = X.sample(fraction=fraction, n=n, seed=seed)
 
-    if isinstance(X, pl.Series):
-        X = X.to_pandas()
-
     # Setting the figure size.
     fig, axs = plt.subplots(figsize=figsize)
-
-    X = X.drop_nulls().to_numpy()
-    unique_values, rel_freq = get_frequencies(X)
+    
+    X_np = X.drop_nulls().to_numpy()
+    unique_values, rel_freq = get_frequencies(X_np)
     unique_values = [str(x) for x in unique_values] 
     if orientation == 'vertical':
         ax = sns.barplot(x=unique_values, y=rel_freq, color=color, width=bar_width, order=order)
@@ -576,7 +573,6 @@ def barplot(X, color, orientation='vertical', bar_width=0.5, order=None, figsize
 
     # Setting the title of the plot.
     plt.title(label = 'Bar-plot' + '  ' + X.name, fontsize=title_size, weight=title_weight)
-    ax.set_ylim(y_low_limit, y_up_limit)  
 
     # Add text annotations to each bar
     for i, v in enumerate(rel_freq):
