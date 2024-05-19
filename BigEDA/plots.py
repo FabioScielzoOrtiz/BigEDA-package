@@ -1305,7 +1305,7 @@ def stripplot_matrix(df, n_cols, title, figsize=(15,15), auto_col=False,
 
 def lineplot_interactive(df, x, y, figsize=(800,600), font_family='Arial', 
                          xlabel_size=16, ylabel_size=16, xticks_size=13, yticks_size=13, 
-                         color='royalblue', line_width=3,
+                         color='royalblue', line_width=3, num_xticks=10,
                          margin_l=50, margin_r=40, margin_t=60, margin_b=50, 
                          title=None, title_size=20, title_width=0.5, title_height=0.95):
 
@@ -1377,6 +1377,8 @@ def lineplot_interactive(df, x, y, figsize=(800,600), font_family='Arial',
         showline=True,
         linecolor='black',
         gridcolor='lightgrey',
+        automargin=True,
+        title_standoff=20,
         tickfont=dict(
             family=font_family,
             size=xticks_size,
@@ -1399,6 +1401,12 @@ def lineplot_interactive(df, x, y, figsize=(800,600), font_family='Arial',
             color='black'
         )
     )
+
+    # Set the number of x-ticks if specified
+    if num_xticks is not None:
+        x_vals = df_to_plot[x].unique()
+        tick_vals = x_vals[::max(1, len(x_vals) // num_xticks)]
+        fig.update_xaxes(tickvals=tick_vals)
 
     return fig
 
