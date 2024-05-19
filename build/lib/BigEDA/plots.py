@@ -181,16 +181,19 @@ def histogram_matrix(df, bins, n_cols, title, figsize=(15,15), auto_col=False,
 
 ######################################################################################################################
 
-def histogram_interactive(X, figsize=(800,600), font_family='Comic Sans MS', title_size=20, 
-                          xlabel_size=12, ylabel_size=12, xticks_size=10, yticks_size=10, 
+def histogram_interactive(X, figsize=(800,600), font_family='Comic Sans MS',  
+                          xlabel_size=16, ylabel_size=16, xticks_size=13, yticks_size=13, 
                           color='tomato', nbins=10,
                           margin_l=50, margin_r=40, margin_t=60, margin_b=50, 
-                          title_width=0.5, title_height=0.95):
+                          title=None, title_size=20, title_width=0.5, title_height=1.08):
 
     X_np = X.drop_nulls().to_numpy()
     df_to_plot = pd.DataFrame({'Value': X_np})
 
     fig = px.histogram(df_to_plot, x='Value', nbins=nbins, histnorm='percent')
+
+    if title is None:
+        title = f'<b>Histogram - {X.name}<b>'
 
     # Set the bar color
     fig.update_traces(marker_color=color)
@@ -224,7 +227,7 @@ def histogram_interactive(X, figsize=(800,600), font_family='Comic Sans MS', tit
     fig.update_layout(
         annotations=[
             dict(
-                text=f'<b>Histogram - {X.name}<b>',
+                text=title,
                 x=title_width,
                 y=title_height,
                 xref='paper',
@@ -789,11 +792,11 @@ def barplot_matrix(df, n_cols, title, figsize=(15,15), auto_col=False,
 
 ######################################################################################################################
 
-def barplot_interactive(X, figsize=(800,600), font_family='Comic Sans MS', title_size=20, 
+def barplot_interactive(X, figsize=(800,600), font_family='Comic Sans MS', 
                         xlabel_size=12, ylabel_size=12, xticks_size=10, yticks_size=10, 
                         color='tomato', categories_order=None,
                         margin_l=50, margin_r=40, margin_t=60, margin_b=50, 
-                        title_width=0.5, title_height=0.95):
+                        title=None, title_size=20, title_width=0.5, title_height=1.08):
 
     X_np = X.drop_nulls().to_numpy()
     unique_values, rel_freq = get_frequencies(X_np)
@@ -808,6 +811,9 @@ def barplot_interactive(X, figsize=(800,600), font_family='Comic Sans MS', title
         fig = px.bar(df_to_plot, y='Value', x='Percentage', category_orders={"Value": categories_order})
     else:
         fig = px.bar(df_to_plot, y='Value', x='Percentage')
+
+    if title is None:
+        title = f'<b>Barplot - {X.name}<b>'
 
     # Set the bar color 
     fig.update_traces(marker_color=color)
@@ -841,7 +847,7 @@ def barplot_interactive(X, figsize=(800,600), font_family='Comic Sans MS', title
     fig.update_layout(
         annotations=[
             dict(
-                text=f'<b>Barplot - {X.name}<b>',
+                text=title,
                 x=title_width,
                 y=title_height,
                 xref='paper',
@@ -1294,6 +1300,107 @@ def stripplot_matrix(df, n_cols, title, figsize=(15,15), auto_col=False,
         fig.savefig(file_name + '.jpg', format='jpg', dpi=500)
 
     plt.show()  
+
+######################################################################################################################
+
+def lineplot_interactive(df, x, y, figsize=(800,600), font_family='Arial', 
+                         xlabel_size=16, ylabel_size=16, xticks_size=13, yticks_size=13, 
+                         color='royalblue', line_width=3,
+                         margin_l=50, margin_r=40, margin_t=60, margin_b=50, 
+                         title=None, title_size=20, title_width=0.5, title_height=0.95):
+
+    df_to_plot = df.to_pandas()
+    df_to_plot = df_to_plot.sort_values(by=x)
+
+    fig = px.line(df_to_plot, x=x, y=y)
+
+    if title is None:
+        title = f'<b>Lineplot - {y} vs {x}<b>'
+
+    # Customize the line color
+    fig.update_traces(line_color=color, line_width=line_width)
+
+    # Adjust the plot size
+    fig.update_layout(
+        width=figsize[0],
+        height=figsize[1]
+    )
+
+    # Update layout for axis titles
+    fig.update_layout(
+        xaxis_title=dict(
+            text=x,
+            font=dict(
+                family=font_family,
+                size=xlabel_size,
+                color="black"
+            )
+        ),
+        yaxis_title=dict(
+            text=y,
+            font=dict(
+                family=font_family,
+                size=ylabel_size,
+                color="black"
+            )
+        )
+    )
+
+    # Update title
+    fig.update_layout(
+        title={'text': title,
+               'y':title_height,
+               'x': title_width,
+               'xanchor': 'center',
+               'yanchor': 'top'},
+            font=dict(
+                family=font_family,
+                size=title_size,
+                color="black"
+            )
+        )
+
+    # Update margins
+    fig.update_layout(
+        margin=dict(l=margin_l, r=margin_r, t=margin_t, b=margin_b)
+    )
+
+    # Update plot background color
+    fig.update_layout(
+        plot_bgcolor='white'
+    )
+
+    # Update x-axis
+    fig.update_xaxes(
+        mirror=True,
+        ticks='outside',
+        showline=True,
+        linecolor='black',
+        gridcolor='lightgrey',
+        tickfont=dict(
+            family=font_family,
+            size=xticks_size,
+            color='black'
+        )
+    )
+
+    # Update y-axis
+    fig.update_yaxes(
+        mirror=True,
+        ticks='outside',
+        showline=True,
+        linecolor='black',
+        gridcolor='white',
+        automargin=True,
+        title_standoff=20,
+        tickfont=dict(
+            family=font_family,
+            size=yticks_size,
+            color='black'
+        )
+    )
+
+    return fig
 
 ######################################################################################################################
 
