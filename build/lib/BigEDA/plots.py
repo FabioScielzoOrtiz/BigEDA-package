@@ -204,7 +204,7 @@ def histogram_interactive(X, figsize=(800,600), font_family='Comic Sans MS', tit
     # Update layout for axis titles
     fig.update_layout(
         xaxis_title=dict(
-            text='Value',
+            text=X.name,
             font=dict(
                 family=font_family,
                 size=xlabel_size,
