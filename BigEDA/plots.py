@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 from itertools import combinations, product
 import matplotlib.patches as mpatches
 import plotly.express as px
-
 from BigEDA.preprocessing import columns_names
+import plotly.graph_objects as go
 
 ######################################################################################################################
 
@@ -2055,7 +2055,7 @@ def barplot_2D(df, cat_condition, cat_conditioned, n_rows, figsize, title_size, 
 ##########################################################################################
 
 def map_interactive(geojson, locations, z, featureidkey, colorscale, marker_opacity, marker_line_width, mapbox_zoom,
-                    mapbox_center, title, title_height, title_width, hue_title, width, height):
+                    mapbox_center, title, title_size, title_height, title_width, hue_title, width, height):
 
     # Create the choropleth map
     fig = go.Figure(go.Choroplethmapbox(
@@ -2091,7 +2091,7 @@ def map_interactive(geojson, locations, z, featureidkey, colorscale, marker_opac
                 tickwidth=2,
                 tickcolor='rgba(0,0,0,0.5)',
                 tickfont=dict(size=12),
-                titlefont=dict(size=14)
+                titlefont=dict(size=title_size)
             )
         ),
         margin={"r": 0, "t": 50, "l": 10, "b": 0},

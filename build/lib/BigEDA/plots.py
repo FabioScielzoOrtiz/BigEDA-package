@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 from itertools import combinations, product
 import matplotlib.patches as mpatches
 import plotly.express as px
-
 from BigEDA.preprocessing import columns_names
+import plotly.graph_objects as go
 
 ######################################################################################################################
 
@@ -2051,3 +2051,57 @@ def barplot_2D(df, cat_condition, cat_conditioned, n_rows, figsize, title_size, 
     for j in range(n_categories, n_rows * n_cols):
         fig.delaxes(axes[j])
     plt.show()
+
+##########################################################################################
+
+def map_interactive(geojson, locations, z, featureidkey, colorscale, marker_opacity, marker_line_width, mapbox_zoom,
+                    mapbox_center, title, title_size, title_height, title_width, hue_title, width, height):
+
+    # Create the choropleth map
+    fig = go.Figure(go.Choroplethmapbox(
+        geojson=geojson,
+        locations=locations,
+        z=z,
+        featureidkey=featureidkey,
+        colorscale=colorscale,
+        marker_opacity=marker_opacity,
+        marker_line_width=marker_line_width,
+        coloraxis="coloraxis"
+    ))
+
+    # Update the layout
+    fig.update_layout(
+        mapbox_style="carto-positron",
+        mapbox_zoom=mapbox_zoom,
+        mapbox_center=mapbox_center,
+        title={
+            'text': title,
+            'y': title_height,
+            'x': title_width,
+            'xanchor': 'center',
+            'yanchor': 'top'
+        },
+        coloraxis=dict(
+            colorscale=colorscale,
+            colorbar=dict(
+                title=hue_title,
+                titleside="right",
+                ticks="outside",
+                ticklen=5,
+                tickwidth=2,
+                tickcolor='rgba(0,0,0,0.5)',
+                tickfont=dict(size=12),
+                titlefont=dict(size=title_size)
+            )
+        ),
+        margin={"r": 0, "t": 50, "l": 10, "b": 0},
+        width=width,  # Set the desired width in pixels
+        height=height  # Optional: set the height to maintain aspect ratio
+    )
+
+    # Update hover information
+    fig.update_traces(
+        hovertemplate='<b>District:</b> %{location}<br><b>Proportion:</b> %{z:.2f}<extra></extra>'
+    )
+
+    return fig
