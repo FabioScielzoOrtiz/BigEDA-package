@@ -1377,6 +1377,8 @@ def lineplot_interactive(df, x, y, figsize=(800,600), font_family='Arial',
         showline=True,
         linecolor='black',
         gridcolor='lightgrey',
+        automargin=True,
+        title_standoff=20,
         tickfont=dict(
             family=font_family,
             size=xticks_size,
