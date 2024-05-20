@@ -2055,7 +2055,7 @@ def barplot_2D(df, cat_condition, cat_conditioned, n_rows, figsize, title_size, 
 ##########################################################################################
 
 def map_interactive(geojson, locations, z, featureidkey, colorscale, marker_opacity, marker_line_width, mapbox_zoom,
-                    mapbox_center, title, title_size, title_height, title_width, hue_title, width, height):
+                    mapbox_center, title, title_size, title_height, title_width, hue_title, width, height, font_family='Comic Sans MS'):
 
     # Create the choropleth map
     fig = go.Figure(go.Choroplethmapbox(
@@ -2081,6 +2081,11 @@ def map_interactive(geojson, locations, z, featureidkey, colorscale, marker_opac
             'xanchor': 'center',
             'yanchor': 'top'
         },
+        font=dict(
+                family=font_family,
+                size=title_size,
+                color="black"
+            ),
         coloraxis=dict(
             colorscale=colorscale,
             colorbar=dict(
@@ -2091,7 +2096,7 @@ def map_interactive(geojson, locations, z, featureidkey, colorscale, marker_opac
                 tickwidth=2,
                 tickcolor='rgba(0,0,0,0.5)',
                 tickfont=dict(size=12),
-                titlefont=dict(size=title_size)
+                titlefont=dict(size=15)
             )
         ),
         margin={"r": 0, "t": 50, "l": 10, "b": 0},
