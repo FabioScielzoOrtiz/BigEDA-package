@@ -1311,7 +1311,6 @@ def lineplot_interactive(df, x, y, figsize=(800,600), font_family='Arial',
 
     df_to_plot = df.to_pandas()
     df_to_plot = df_to_plot.sort_values(by=x)
-
     fig = px.line(df_to_plot, x=x, y=y)
 
     if title is None:
