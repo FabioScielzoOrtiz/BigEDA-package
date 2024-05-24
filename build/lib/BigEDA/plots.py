@@ -189,9 +189,9 @@ def histogram_interactive(X, figsize=(800,600), font_family='Comic Sans MS',
                           title=None, title_size=20, title_width=0.5, title_height=1.08):
 
     X_np = X.drop_nulls().to_numpy()
-    df_to_plot = pd.DataFrame({'Value': X_np})
+    df_to_plot = pd.DataFrame({X.name: X_np})
 
-    fig = px.histogram(df_to_plot, x='Value', nbins=nbins, histnorm='percent')
+    fig = px.histogram(df_to_plot, x=X.name, nbins=nbins, histnorm='percent')
 
     if title is None:
         title = f'<b>Histogram - {X.name}<b>'

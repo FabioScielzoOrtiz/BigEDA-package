@@ -306,14 +306,14 @@ def summary(df, auto_col=False, quant_col_names=[], cat_col_names=[]) :
             unique_values = [x for x in unique_values if x is not None]
             num_unique_values_quant_col.append(len(unique_values))
 
-        prop_nulls_quant_cols = perc_cols_nulls(df[quant_col_names])
+        perc_nulls_quant_cols = perc_cols_nulls(df[quant_col_names])
 
         quant_summary = pd.DataFrame(index=quant_col_names, 
-                                    columns=['n_unique', 'prop_nan', 'mean','std','min','Q10','Q25','median','Q75', 'Q90','max', 
+                                    columns=['n_unique', 'perc_nan', 'mean','std','min','Q10','Q25','median','Q75', 'Q90','max', 
                                              'kurtosis', 'skew', 'prop_outliers'])
 
         quant_summary.loc[:,'n_unique'] = num_unique_values_quant_col
-        quant_summary.loc[:,'prop_nan'] = prop_nulls_quant_cols
+        quant_summary.loc[:,'perc_nan'] = perc_nulls_quant_cols
         quant_summary.loc[:,'mean'] = mean_quant_cols
         quant_summary.loc[:,'std'] = std_quant_cols
         quant_summary.loc[:,'min'] = min_quant_cols
@@ -342,13 +342,13 @@ def summary(df, auto_col=False, quant_col_names=[], cat_col_names=[]) :
             unique_values = [x for x in unique_values if x is not None]
             num_unique_values_cat_col.append(len(unique_values))
 
-        prop_nulls_cat_cols = perc_cols_nulls(df[cat_col_names])
+        perc_nulls_cat_cols = perc_cols_nulls(df[cat_col_names])
 
         cat_summary = pd.DataFrame(index=cat_col_names, 
-                                   columns=['n_unique', 'prop_nan', 'mode'])
+                                   columns=['n_unique', 'perc_nan', 'mode'])
 
         cat_summary.loc[:,'n_unique'] = num_unique_values_cat_col
-        cat_summary.loc[:,'prop_nan'] = prop_nulls_cat_cols
+        cat_summary.loc[:,'perc_nan'] = perc_nulls_cat_cols
         cat_summary.loc[:,'mode'] = mode_cat_cols
 
     else :
@@ -400,15 +400,15 @@ def cross_quant_cat_summary(df, quant_col, cat_col) :
     quant_cond_summary = quant_cond_summary.with_columns(prop_outliers.alias(f'prop_outliers_{quant_col}'))
     # quant_cond_summary = quant_cond_summary.with_columns(prop_not_outliers.alias('prop_not_outliers_buy_price'))
 
-    prop_nulls_dict = dict()
+    perc_nulls_dict = dict()
     # prop_not_nulls_dict = dict()
     for cat in unique_values:
-        prop_nulls_dict[cat] = perc_cols_nulls(df_cond[quant_col][cat_col][cat])
+        perc_nulls_dict[cat] = perc_cols_nulls(df_cond[quant_col][cat_col][cat])
         # prop_not_nulls_dict[cat] = 1 - prop_nulls_dict[cat]
 
-    prop_nulls = pl.Series(prop_nulls_dict.values())
+    prop_nulls = pl.Series(perc_nulls_dict.values())
     # prop_not_nulls = pl.Series(prop_not_nulls_dict.values())
-    quant_cond_summary = quant_cond_summary.with_columns(prop_nulls.alias(f'prop_nan_{quant_col}'))
+    quant_cond_summary = quant_cond_summary.with_columns(prop_nulls.alias(f'perc_nan_{quant_col}'))
     # quant_cond_summary = quant_cond_summary.with_columns(prop_not_nulls.alias('prop_not_nan_buy_price'))
     if df[cat_col].dtype in [pl.Int32, pl.Int64, pl.Float32, pl.Float64]:
         quant_cond_summary = quant_cond_summary.sort(by=quant_cond_summary.columns[0])
