@@ -236,6 +236,9 @@ def prop_cols_nulls(X):
     num_rows = len(X)
     return  count_cols_nulls(X) / num_rows
 
+def perc_cols_nulls(X):
+    return  (prop_cols_nulls(X)*100).round(2)
+
 ######################################################################################################################
 
 def count_row_nulls(X):

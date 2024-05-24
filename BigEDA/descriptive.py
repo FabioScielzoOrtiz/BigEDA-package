@@ -7,7 +7,7 @@ from scipy.stats import skew
 from itertools import combinations, product
 from collections import Counter
 
-from BigEDA.preprocessing import columns_names, prop_cols_nulls
+from BigEDA.preprocessing import columns_names, perc_cols_nulls
 
 ######################################################################################################################
 
@@ -306,7 +306,7 @@ def summary(df, auto_col=False, quant_col_names=[], cat_col_names=[]) :
             unique_values = [x for x in unique_values if x is not None]
             num_unique_values_quant_col.append(len(unique_values))
 
-        prop_nulls_quant_cols = prop_cols_nulls(df[quant_col_names])
+        prop_nulls_quant_cols = perc_cols_nulls(df[quant_col_names])
 
         quant_summary = pd.DataFrame(index=quant_col_names, 
                                     columns=['n_unique', 'prop_nan', 'mean','std','min','Q10','Q25','median','Q75', 'Q90','max', 
@@ -342,7 +342,7 @@ def summary(df, auto_col=False, quant_col_names=[], cat_col_names=[]) :
             unique_values = [x for x in unique_values if x is not None]
             num_unique_values_cat_col.append(len(unique_values))
 
-        prop_nulls_cat_cols = prop_cols_nulls(df[cat_col_names])
+        prop_nulls_cat_cols = perc_cols_nulls(df[cat_col_names])
 
         cat_summary = pd.DataFrame(index=cat_col_names, 
                                    columns=['n_unique', 'prop_nan', 'mode'])
@@ -403,7 +403,7 @@ def cross_quant_cat_summary(df, quant_col, cat_col) :
     prop_nulls_dict = dict()
     # prop_not_nulls_dict = dict()
     for cat in unique_values:
-        prop_nulls_dict[cat] = prop_cols_nulls(df_cond[quant_col][cat_col][cat])
+        prop_nulls_dict[cat] = perc_cols_nulls(df_cond[quant_col][cat_col][cat])
         # prop_not_nulls_dict[cat] = 1 - prop_nulls_dict[cat]
 
     prop_nulls = pl.Series(prop_nulls_dict.values())
