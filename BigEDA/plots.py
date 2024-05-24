@@ -8,6 +8,7 @@ import matplotlib.patches as mpatches
 import plotly.express as px
 from BigEDA.preprocessing import columns_names
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 ######################################################################################################################
 
@@ -2545,7 +2546,8 @@ def barplot_interactive_2D_multiplot(df, x, y, figsize=(800,600), font_family='C
 ##########################################################################################
 
 def map_interactive(geojson, locations, z, featureidkey, colorscale, marker_opacity, marker_line_width, mapbox_zoom,
-                    mapbox_center, title, title_size, title_height, title_width, hue_title, width, height, font_family='Comic Sans MS'):
+                    mapbox_center, title, title_size, title_height, title_width, hue_title, width, height, font_family='Comic Sans MS',
+                    margin_l=50, margin_r=40, margin_t=60, margin_b=50):
 
     # Create the choropleth map
     fig = go.Figure(go.Choroplethmapbox(
@@ -2589,14 +2591,14 @@ def map_interactive(geojson, locations, z, featureidkey, colorscale, marker_opac
                 titlefont=dict(size=15)
             )
         ),
-        margin={"r": 0, "t": 50, "l": 10, "b": 0},
+        margin={"r": margin_r, "t": margin_t, "l": margin_l, "b": margin_b},
         width=width,  # Set the desired width in pixels
         height=height  # Optional: set the height to maintain aspect ratio
     )
 
     # Update hover information
     fig.update_traces(
-        hovertemplate='<b>District:</b> %{location}<br><b>Proportion:</b> %{z:.2f}<extra></extra>'
+        hovertemplate=f'<b>{locations.name}:</b> ' + '%{location}<br>' + f'<b>{z.name}:</b> ' + '%{z:.2f}<extra></extra>'
     )
 
     return fig

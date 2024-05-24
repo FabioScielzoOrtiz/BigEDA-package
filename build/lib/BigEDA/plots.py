@@ -8,6 +8,7 @@ import matplotlib.patches as mpatches
 import plotly.express as px
 from BigEDA.preprocessing import columns_names
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 ######################################################################################################################
 
