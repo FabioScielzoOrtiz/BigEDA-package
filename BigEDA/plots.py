@@ -2321,12 +2321,10 @@ def barplot_2D(df, cat_condition, cat_conditioned, n_rows, figsize, title_size, 
 ##########################################################################################
 
 def barplot_interactive_2D(df, x, y, figsize=(800,600), font_family='Comic Sans MS', 
-                        xlabel=None, xlabel_size=12, ylabel_size=12, xticks_size=10, yticks_size=10, 
-                        color='tomato', 
-                        margin_l=50, margin_r=40, margin_t=60, margin_b=50, 
+                        xlabel=None, ylabel=None, xlabel_size=12, ylabel_size=12, xticks_size=10, yticks_size=10, 
+                        color='tomato', margin_l=50, margin_r=40, margin_t=60, margin_b=50, 
                         title=None, title_size=20, title_width=0.5, title_height=1.08):
     
-
     fig = px.bar(df, x=x, y=y)
 
     if title is None:
@@ -2352,7 +2350,7 @@ def barplot_interactive_2D(df, x, y, figsize=(800,600), font_family='Comic Sans 
             )
         ),
         yaxis_title=dict(
-            text=y,
+            text=ylabel if ylabel is not None else y,
             font=dict(
                 family=font_family,
                 size=ylabel_size,
