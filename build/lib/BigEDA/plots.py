@@ -1559,7 +1559,7 @@ def lineplot_interactive(df, x, y, figsize=(800,600), font_family='Arial',
 
 ######################################################################################################################
 
-def lineplot_interactive_multiplot(dic_df, y, figsize=(800,600), font_family='Comic Sans MS', 
+def time_series_interactive_multiplot(dic_df, y, figsize=(800,600), font_family='Comic Sans MS', 
                         xlabel_size=12, ylabel_size=12, xticks_size=10, yticks_size=10, 
                         n_cols=2, wspace=0.5, hspace=0.5, subtitle_size=15, tickangle=90,
                         margin_l=50, margin_r=40, margin_t=60, margin_b=50, line_width=3, color=None,
@@ -1591,8 +1591,6 @@ def lineplot_interactive_multiplot(dic_df, y, figsize=(800,600), font_family='Co
         # Remove the y-axis labels for the right subplots
         if col > 1:
             fig.update_yaxes(title_text='', row=row, col=col)
-        if row < n_rows:
-            fig.update_xaxes(title_text='', row=row, col=col)
 
     if title is None:
         title = f'<b>Multiple Times Series - {y}<b>'
@@ -2599,4 +2597,119 @@ def map_interactive(geojson, locations, z, featureidkey, colorscale, marker_opac
         hovertemplate=f'<b>{locations.name}:</b> ' + '%{location}<br>' + f'<b>{z.name}:</b> ' + '%{z:.2f}<extra></extra>'
     )
 
+    return fig
+
+##########################################################################################
+
+def map_interactive_multiplot(n_cols, geojson, locations, z_dict, subtitles, featureidkey, colorscale, marker_opacity, marker_line_width, mapbox_zoom,
+                              mapbox_center, title, title_size, subtitle_size, title_height, title_width, hue_titles, width, height, font_family='Comic Sans MS',
+                              margin_l=50, margin_r=40, margin_t=60, margin_b=50, hspace=0.1, wspace=0.1, subtitles_height=0.90):
+
+    n_maps = len(z_dict)
+    n_rows = int(np.ceil(n_maps / n_cols))
+    
+    fig = make_subplots(rows=n_rows, cols=n_cols, shared_xaxes=False, shared_yaxes=False,
+                        subplot_titles=list(subtitles.values()),
+                        vertical_spacing=hspace, horizontal_spacing=wspace,
+                        specs=[[{'type': 'mapbox'} for _ in range(n_cols)] for _ in range(n_rows)])
+
+    coloraxis_counter = 1
+
+    for i, z_key in enumerate(z_dict.keys()):
+        print(f"Creating subplot {i+1}/{n_maps} for {z_key}")
+        
+        row = (i // n_cols) + 1
+        col = (i % n_cols) + 1
+
+        coloraxis_name = f"coloraxis{coloraxis_counter}"
+        coloraxis_counter += 1
+
+        fig.add_trace(
+            go.Choroplethmapbox(
+                geojson=geojson,
+                locations=locations,
+                z=z_dict[z_key],
+                featureidkey=featureidkey,
+                colorscale=colorscale,
+                marker_opacity=marker_opacity,
+                marker_line_width=marker_line_width,
+                name=subtitles[z_key],
+                hovertemplate=f'<b>{locations.name}:</b> ' + '%{location}<br>' + f'<b>{z_dict[z_key].name}:</b> ' + '%{z:.2f}<extra></extra>',
+                coloraxis=coloraxis_name
+            ), 
+            row=row, col=col
+        )
+
+        fig.update_layout(
+            **{coloraxis_name: dict(
+                colorscale=colorscale,
+                colorbar=dict(
+                    title=hue_titles[z_key],
+                    titleside="right",
+                    ticks="outside",
+                    ticklen=5,
+                    tickwidth=2,
+                    tickcolor='rgba(0,0,0,0.5)',
+                    tickfont=dict(size=12),
+                    titlefont=dict(size=12),
+                    x=1.03,  # Adjust x position based on column index
+                    y=0.8 - i*0.22,  # Center color bar vertically
+                    len=0.3 / n_rows,  # Adjust length of color bar
+                    thickness=15  # Adjust thickness of color bar
+            ))}
+        )
+
+        fig.layout[f'mapbox{i+1}'] = dict(
+            style="carto-positron",
+            center=mapbox_center,
+            zoom=mapbox_zoom,
+            domain={
+                'x': [0.05 + (col-1)*(1/n_cols) + wspace*(col-1), (col)*(1/n_cols) - wspace],
+                'y': [1 - row/n_rows, 1 - (row-1)/n_rows - hspace]
+            }
+        )
+
+    # Add custom annotations for subtitles
+    annotations = []
+    for i, (key, subtitle) in enumerate(subtitles.items()):
+        row = (i // n_cols) + 1
+        col = (i % n_cols) + 1
+        x_pos = (0.05 + (col-1)*(1/n_cols) + (col)*(1/n_cols) - wspace) / 2
+        y_pos =  subtitles_height - (row-1)/n_rows - hspace / 21
+
+        annotations.append(dict(
+            x=x_pos,
+            y=y_pos,
+            xref='paper',
+            yref='paper',
+            text=subtitle,
+            showarrow=False,
+            font=dict(
+                size=subtitle_size,
+                family=font_family,
+                color='black'
+            ),
+            xanchor='center',
+            yanchor='bottom'
+        ))
+
+    fig.update_layout(
+        title={
+            'text': title,
+            'y': title_height,
+            'x': title_width,
+            'xanchor': 'center',
+            'yanchor': 'top'
+        },
+        font=dict(
+            family=font_family,
+            size=title_size,
+            color="black"
+        ),
+        margin={"r": margin_r, "t": margin_t, "l": margin_l, "b": margin_b},
+        width=width,
+        height=height,
+        annotations=annotations
+    )
+    
     return fig
