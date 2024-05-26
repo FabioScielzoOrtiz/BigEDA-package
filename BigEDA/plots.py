@@ -2321,7 +2321,8 @@ def barplot_2D(df, cat_condition, cat_conditioned, n_rows, figsize, title_size, 
 def barplot_interactive_2D(df, x, y, figsize=(800,600), font_family='Comic Sans MS', 
                         xlabel=None, ylabel=None, xlabel_size=12, ylabel_size=12, xticks_size=10, yticks_size=10, 
                         color='tomato', margin_l=50, margin_r=40, margin_t=60, margin_b=50, 
-                        title=None, title_size=20, title_width=0.5, title_height=1.08):
+                        title=None, title_size=20, title_width=0.5, title_height=1.08,
+                        x_grid_color='lightgrey', y_grid_color='lightgrey'):
     
     fig = px.bar(df, x=x, y=y)
 
@@ -2388,7 +2389,7 @@ def barplot_interactive_2D(df, x, y, figsize=(800,600), font_family='Comic Sans 
         ticks='outside',
         showline=True,
         linecolor='black',
-        gridcolor='lightgrey',
+        gridcolor=x_grid_color ,
         tickfont=dict(
             family=font_family,
             size=xticks_size,
@@ -2401,7 +2402,7 @@ def barplot_interactive_2D(df, x, y, figsize=(800,600), font_family='Comic Sans 
         ticks='outside',
         showline=True,
         linecolor='black',
-        gridcolor='white',
+        gridcolor=y_grid_color,
         automargin=True,
         title_standoff=20,  # Increase this value to add more space between y-axis label and ticks
         tickfont=dict(
@@ -2437,7 +2438,7 @@ def barplot_interactive_2D_multiplot(df, x, y, figsize=(800,600), font_family='C
     n_rows = int(np.ceil(n_subplots / n_cols))
     colors = px.colors.qualitative.Plotly[:n_subplots] 
     fig = make_subplots(rows=n_rows, cols=n_cols, shared_xaxes=False, shared_yaxes=False,
-                        subplot_titles=[f"{y} = {cat}" for cat in y_categories],
+                        subplot_titles=[f"{cat}" for cat in y_categories],
                         vertical_spacing=hspace, horizontal_spacing=wspace)
 
     for i, cat in enumerate(y_categories):
@@ -2603,7 +2604,7 @@ def map_interactive(geojson, locations, z, featureidkey, colorscale, marker_opac
 
 def map_interactive_multiplot(n_cols, geojson, locations, z_dict, subtitles, featureidkey, colorscale, marker_opacity, marker_line_width, mapbox_zoom,
                               mapbox_center, title, title_size, subtitle_size, title_height, title_width, hue_titles, width, height, font_family='Comic Sans MS',
-                              margin_l=50, margin_r=40, margin_t=60, margin_b=50, hspace=0.1, wspace=0.1, subtitles_height=0.90):
+                              margin_l=50, margin_r=40, margin_t=60, margin_b=50, hspace=0.1, wspace=0.1, subtitles_height=0.90, hue_height=0.8, hue_vspace=0.2):
 
     n_maps = len(z_dict)
     n_rows = int(np.ceil(n_maps / n_cols))
@@ -2616,8 +2617,7 @@ def map_interactive_multiplot(n_cols, geojson, locations, z_dict, subtitles, fea
     coloraxis_counter = 1
 
     for i, z_key in enumerate(z_dict.keys()):
-        print(f"Creating subplot {i+1}/{n_maps} for {z_key}")
-        
+       
         row = (i // n_cols) + 1
         col = (i % n_cols) + 1
 
@@ -2653,7 +2653,7 @@ def map_interactive_multiplot(n_cols, geojson, locations, z_dict, subtitles, fea
                     tickfont=dict(size=12),
                     titlefont=dict(size=12),
                     x=1.03,  # Adjust x position based on column index
-                    y=0.8 - i*0.22,  # Center color bar vertically
+                    y=hue_height - i*hue_vspace,  # Center color bar vertically
                     len=0.3 / n_rows,  # Adjust length of color bar
                     thickness=15  # Adjust thickness of color bar
             ))}
