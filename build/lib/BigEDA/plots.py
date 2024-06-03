@@ -2272,7 +2272,7 @@ def ecdfplot_2D_matrix(df, n_cols, title, complementary=False, figsize=(15,15), 
 # Useful when the response is categorical and we want to analyze the influence of categorical predictors on it.
 
 
-def barplot_2D(df, cat_condition, cat_conditioned, n_rows, figsize, title_size, subtitles_size, title_height, 
+def barplot_2D(df, cat_condition, cat_conditioned, n_rows, figsize, title, title_size, subtitles_size, title_height, 
                xlabel_size=10, xticks_size=9, hspace=1, wspace=0.5, palette='tab10', ylabel_size=11, x_rotation=0,
                max_ytick=1, title_weight='bold', categories_order=None, bar_width=0.4, alpha=1):
     
@@ -2298,9 +2298,10 @@ def barplot_2D(df, cat_condition, cat_conditioned, n_rows, figsize, title_size, 
         proportions = list(cond_prop_response[cat_condition][cat].values())
         sns.barplot(x=categories, y=proportions, color=colors[i],
                     order=categories_order, alpha=alpha, width=bar_width, ax=axes[i])
-
-        axes[i].set_title(cat, fontsize=subtitles_size)
-        axes[i].set_ylabel('')
+        
+        subtitle = f'{cat_condition} = {cat}'
+        axes[i].set_title(subtitle, fontsize=subtitles_size)
+        axes[i].set_ylabel('Proportion')
         axes[i].set_xlabel(cat_conditioned, size=xlabel_size)
         axes[i].tick_params(axis='x', rotation=x_rotation, labelsize=xticks_size)
         if max_ytick is not None:
@@ -2308,9 +2309,10 @@ def barplot_2D(df, cat_condition, cat_conditioned, n_rows, figsize, title_size, 
         else:
             max_prop = np.max(proportions)
             axes[i].set_yticks(np.arange(0, max_prop + 0.2, 0.2))
-    axes[0].set_ylabel('Proportion', size=ylabel_size)
-
-    plt.suptitle(f'{cat_conditioned} | {cat_condition}', size=title_size, weight=title_weight, y=title_height)
+    
+    if title is None:
+        title = f'{cat_conditioned} | {cat_condition}' 
+    plt.suptitle(title, size=title_size, weight=title_weight, y=title_height)
     plt.subplots_adjust(hspace=hspace, wspace=wspace) 
     for j in range(n_categories, n_rows * n_cols):
         fig.delaxes(axes[j])
