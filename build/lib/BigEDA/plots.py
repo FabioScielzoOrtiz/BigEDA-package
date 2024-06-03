@@ -539,7 +539,7 @@ def ecdfplot_matrix(df, n_cols, title, complementary=False, figsize=(15,15), aut
                      quant_col_names=[], remove_columns=[], add_columns=[], 
                      n_xticks=15, title_fontsize=15, subtitles_fontsize=11, save=False, file_name=None, 
                      random=False, n=None, fraction=None, seed=123, x_rotation=0, title_height=0.95,
-                     style='whitegrid', hspace=1, wspace=0.2, n_round_xticks=2) :
+                     style='whitegrid', hspace=1, wspace=0.2, n_round_xticks=2, xlabel_size=10) :
  
     """
     Parameters (inputs)
@@ -609,7 +609,7 @@ def ecdfplot_matrix(df, n_cols, title, complementary=False, figsize=(15,15), aut
         xticks = get_ticks(min, max, n_ticks=n_xticks, n_round=n_round_xticks)
         ax.set_xticks(xticks)
         ax.tick_params(axis='x', rotation=x_rotation)
-        ax.set_xlabel(col)
+        ax.set_xlabel(col, size=xlabel_size)
         ax.set_ylabel('')
 
     # Remove any unused subplots in case the number of 'geo' values is less than num_rows * num_cols
@@ -966,7 +966,7 @@ def scatterplot(X, Y, color, figsize=(9,5), n_xticks=10, n_yticks=10, x_rotation
 
 def scatterplot_matrix(df, n_cols, title, figsize=(15,15), auto_col=False, 
                      response=None, predictors=None,
-                     quant_col_names=[], remove_columns=[], add_columns=[], 
+                     quant_col_names=[], remove_columns=[], add_columns=[], xlabel_size=10, ylabel_size=10,
                      n_xticks=10, n_yticks=10, title_fontsize=15, subtitles_fontsize=12, save=False, file_name=None, 
                      random=False, n=None, fraction=None, seed=123, x_rotation=0, y_rotation=0,
                      title_height=0.95, style='whitegrid', hspace=1, wspace=0.2, n_round_xticks=2, n_round_yticks=2) :
@@ -1051,8 +1051,8 @@ def scatterplot_matrix(df, n_cols, title, figsize=(15,15), auto_col=False,
         ax.set_xticks(xticks)
         ax.tick_params(axis='x', rotation=x_rotation)
         ax.tick_params(axis='y', rotation=y_rotation)
-        ax.set_xlabel(col1)
-        ax.set_ylabel(col2)
+        ax.set_xlabel(col1, size=xlabel_size)
+        ax.set_ylabel(col2, size=ylabel_size)
 
     # Remove any unused subplots in case the number of 'geo' values is less than num_rows * num_cols
     for j in range(len(cols_combis), n_rows * n_cols):
@@ -1309,7 +1309,8 @@ def stripplot_matrix(df, n_cols, title, figsize=(15,15), auto_col=False,
                      title_fontsize=15, subtitles_fontsize=12, save=False, file_name=None,
                      random=False, n=None, fraction=None, seed=123, x_rotation=0, y_rotation=0,
                      title_height=0.95, style='whitegrid', hspace=1, wspace=0.2, statistics=None, lines_width=0.5, 
-                     bbox_to_anchor=(0.5,-1), legend_size=9, color_stats=None, n_round_yticks=2) :
+                     bbox_to_anchor=(0.5,-1), legend_size=9, color_stats=None, n_round_yticks=2,
+                     xlabel_size=10, ylabel_size=10) :
  
     """
     Parameters (inputs)
@@ -1395,8 +1396,8 @@ def stripplot_matrix(df, n_cols, title, figsize=(15,15), auto_col=False,
         ax.set_yticks(yticks)
         ax.tick_params(axis='x', rotation=x_rotation)
         ax.tick_params(axis='y', rotation=y_rotation)
-        ax.set_xlabel(col1)
-        ax.set_ylabel(col2)
+        ax.set_xlabel(col1, size=xlabel_size)
+        ax.set_ylabel(col2, size=ylabel_size)
 
         if statistics is not None :
 
@@ -1768,7 +1769,7 @@ def boxplot_2D(df, X_name, Y_name, color, figsize=(9,5), n_yticks=10, x_rotation
 def boxplot_2D_matrix(df, n_cols, title, figsize=(15,15), auto_col=False, 
                      response=None, predictors=None,
                      quant_col_names=[], cat_col_names=[], remove_quant_col=[], add_quant_col=[], 
-                     remove_cat_col=[], add_cat_col=[], n_yticks=10, 
+                     remove_cat_col=[], add_cat_col=[], n_yticks=10, xlabel_size=10, ylabel_size=10,
                      title_fontsize=15, subtitles_fontsize=12, save=False, file_name=None, 
                      random=False, n=None, fraction=None, seed=123, x_rotation=0, y_rotation=0,
                      title_height=0.95, style='whitegrid', hspace=1, wspace=0.2, statistics=None, lines_width=0.5, 
@@ -1859,8 +1860,8 @@ def boxplot_2D_matrix(df, n_cols, title, figsize=(15,15), auto_col=False,
             ax.set_yticks(yticks)
         ax.tick_params(axis='x', rotation=x_rotation)
         ax.tick_params(axis='y', rotation=y_rotation)
-        ax.set_xlabel(col1)
-        ax.set_ylabel(col2)
+        ax.set_xlabel(col1, size=xlabel_size)
+        ax.set_ylabel(col2, size=ylabel_size)
 
         if statistics is not None :
 
@@ -1915,7 +1916,8 @@ def boxplot_2D_matrix(df, n_cols, title, figsize=(15,15), auto_col=False,
     
 def histogram_2D(df, quant_column, cat_column, bins=10, figsize=(9,5), n_yticks=5, n_xticks=10, x_rotation=0,   
               random=False, n=None, fraction=None, seed=123, save=False, file_name=None,
-              style='whitegrid', bbox_to_anchor=(1,1), legend_size=10, transparency=0.8) :
+              style='whitegrid', bbox_to_anchor=(1,1), legend_size=10, transparency=0.8,
+              xlabel_size=10, ylabel_size=10) :
 
     """
     Parameters (inputs)
@@ -1957,8 +1959,8 @@ def histogram_2D(df, quant_column, cat_column, bins=10, figsize=(9,5), n_yticks=
     p.set_xticks(xticks_index)
     p.set_yticks(np.linspace(0, 1, n_yticks))
     p.tick_params(axis='x', rotation=x_rotation)
-    p.set_xlabel(quant_column)
-    p.set_ylabel('Proportion')
+    p.set_xlabel(quant_column, size=xlabel_size)
+    p.set_ylabel('Proportion', size=ylabel_size)
     p.legend(handles=patches, title=cat_column, loc='upper right', bbox_to_anchor=bbox_to_anchor, fontsize=legend_size)
     
     # Setting the title of the plot.
@@ -1978,7 +1980,8 @@ def histogram_2D_matrix(df, bins, n_cols, title, figsize=(15,15), auto_col=False
                      title_fontsize=15, subtitles_fontsize=13, save=False, file_name=None, 
                      random=False, n=None, fraction=None, seed=123, x_rotation=0, 
                      title_height=0.95, style='whitegrid', hspace=1, wspace=0.2,   
-                     bbox_to_anchor=(1,1), legend_size=10, transparency=0.8) :
+                     bbox_to_anchor=(1,1), legend_size=10, transparency=0.8,
+                     xlabel_size=10, ylabel_size=10) :
  
     """
     Parameters (inputs)
@@ -2069,8 +2072,8 @@ def histogram_2D_matrix(df, bins, n_cols, title, figsize=(15,15), auto_col=False
         ax.set_yticks(np.linspace(0, 1, n_yticks))
         ax.set_xticks(xticks_index)
         ax.tick_params(axis='x', rotation=x_rotation)
-        ax.set_xlabel(col2)
-        ax.set_ylabel('Proportion')
+        ax.set_xlabel(col2, size=xlabel_size)
+        ax.set_ylabel('Proportion', size=ylabel_size)
         ax.legend(handles=patches, title=col1, loc='upper right', bbox_to_anchor=bbox_to_anchor, fontsize=legend_size)
 
      # Remove any unused subplots in case the number of 'geo' values is less than num_rows * num_cols
@@ -2093,7 +2096,7 @@ def histogram_2D_matrix(df, bins, n_cols, title, figsize=(15,15), auto_col=False
 def ecdfplot_2D(df, quant_column, cat_column, complementary=False, figsize=(9,5), n_yticks=5, n_xticks=10, x_rotation=0,   
               random=False, n=None, fraction=None, seed=123, save=False, file_name=None,
               style='whitegrid', bbox_to_anchor=(1,1), legend_size=10,
-              transparency=0.8) :
+              transparency=0.8, xlabel_size=10, ylabel_size=10) :
 
     """
     Parameters (inputs)
@@ -2135,8 +2138,8 @@ def ecdfplot_2D(df, quant_column, cat_column, complementary=False, figsize=(9,5)
     p.set_xticks(xticks_index)
     p.set_yticks(np.linspace(0, 1, n_yticks))
     p.tick_params(axis='x', rotation=x_rotation)
-    p.set_xlabel(quant_column)
-    p.set_ylabel('Proportion')
+    p.set_xlabel(quant_column, size=xlabel_size)
+    p.set_ylabel('Proportion', size=ylabel_size)
     p.legend(handles=patches, title=cat_column, loc='upper right', bbox_to_anchor=bbox_to_anchor, fontsize=legend_size)
     
     # Setting the title of the plot.
@@ -2156,7 +2159,8 @@ def ecdfplot_2D_matrix(df, n_cols, title, complementary=False, figsize=(15,15), 
                      title_fontsize=15, subtitle_fontsize=12, save=False, file_name=None, 
                      random=False, n=None, fraction=None, seed=123, x_rotation=0, 
                      title_height=0.95, style='whitegrid', hspace=1, wspace=0.2,   
-                     bbox_to_anchor=(1,1), legend_size=10, transparency=0.8) :
+                     bbox_to_anchor=(1,1), legend_size=10, transparency=0.8,
+                     xlabel_size=10, ylabel_size=10) :
  
     """
     Parameters (inputs)
@@ -2247,8 +2251,8 @@ def ecdfplot_2D_matrix(df, n_cols, title, complementary=False, figsize=(15,15), 
         ax.set_xticks(xticks_index)
         ax.set_yticks(np.linspace(0, 1, n_yticks))
         ax.tick_params(axis='x', rotation=x_rotation)
-        ax.set_xlabel(col2)
-        ax.set_ylabel('Proportion')
+        ax.set_xlabel(col2, size=xlabel_size)
+        ax.set_ylabel('Proportion', size=ylabel_size)
         ax.legend(handles=patches, title=col1, loc='upper right', bbox_to_anchor=bbox_to_anchor, fontsize=legend_size)
 
      # Remove any unused subplots in case the number of 'geo' values is less than num_rows * num_cols
