@@ -79,7 +79,7 @@ def histogram(X, bins, color, figsize=(9,5), n_xticks=15, x_rotation=0, get_inte
     
     if save == True :
 
-        fig.savefig(file_name + '.jpg', format='jpg', dpi=600, bbox_inches="tight")
+        fig.savefig(file_name + '.jpg', format='jpg', dpi=600, bbox_inches="tight", pad_inches=0.2)
     
     plt.show()
 
@@ -176,7 +176,7 @@ def histogram_matrix(df, bins, n_cols, title, figsize=(15,15), auto_col=False,
 
     # Setting save options.
     if save == True :         
-        fig.savefig(file_name + '.jpg', format='jpg', dpi=500)
+        fig.savefig(file_name + '.jpg', format='jpg', dpi=500, bbox_inches="tight", pad_inches=0.2)
 
     plt.show()  
 
@@ -354,7 +354,7 @@ def boxplot(X, color, figsize=(9,5), n_xticks=15, x_rotation=0, statistics=None,
 
     if save == True :
 
-        fig.savefig(file_name + '.jpg', format='jpg', dpi=600, bbox_inches="tight")
+        fig.savefig(file_name + '.jpg', format='jpg', dpi=600, bbox_inches="tight", pad_inches=0.2)
     
     plt.show()
 
@@ -481,7 +481,7 @@ def boxplot_matrix(df, n_cols, title, figsize=(15,15), auto_col=False,
 
     # Setting save options.
     if save == True :         
-        fig.savefig(file_name + '.jpg', format='jpg', dpi=500)
+        fig.savefig(file_name + '.jpg', format='jpg', dpi=500, bbox_inches="tight", pad_inches=0.2)
 
     plt.show()
 
@@ -529,14 +529,14 @@ def ecdfplot(X, color, figsize=(9,5), n_xticks=15, n_yticks=10, x_rotation=0, y_
 
     if save == True :
 
-        fig.savefig(file_name + '.jpg', format='jpg', dpi=600, bbox_inches="tight")
+        fig.savefig(file_name + '.jpg', format='jpg', dpi=600, bbox_inches="tight", pad_inches=0.2)
     
     plt.show()
 
 ######################################################################################################################
 
 def ecdfplot_matrix(df, n_cols, title, complementary=False, figsize=(15,15), auto_col=False, 
-                     quant_col_names=[], remove_columns=[], add_columns=[], 
+                     quant_col_names=[], remove_columns=[], add_columns=[], title_weight='bold',
                      n_xticks=15, title_fontsize=15, subtitles_fontsize=11, save=False, file_name=None, 
                      random=False, n=None, fraction=None, seed=123, x_rotation=0, title_height=0.95,
                      style='whitegrid', hspace=1, wspace=0.2, n_round_xticks=2, xlabel_size=10) :
@@ -617,13 +617,13 @@ def ecdfplot_matrix(df, n_cols, title, complementary=False, figsize=(15,15), aut
         fig.delaxes(axes[j])
 
     # Establishing a general tittle for the plot.
-    plt.suptitle(title, fontsize=title_fontsize, y=title_height)
+    plt.suptitle(title, fontsize=title_fontsize, y=title_height, weight=title_weight)
     
     plt.subplots_adjust(hspace=hspace, wspace=wspace) 
 
     # Setting save options.
     if save == True :         
-        fig.savefig(file_name + '.jpg', format='jpg', dpi=500)
+        fig.savefig(file_name + '.jpg', format='jpg', dpi=500, bbox_inches="tight", pad_inches=0.2)
 
     plt.show()
 
@@ -787,7 +787,7 @@ def barplot_matrix(df, n_cols, title, figsize=(15,15), auto_col=False,
 
     # Setting save options.
     if save == True :         
-        fig.savefig(file_name + '.jpg', format='jpg', dpi=500)
+        fig.savefig(file_name + '.jpg', format='jpg', dpi=500, bbox_inches="tight", pad_inches=0.2)
 
     plt.show()
 
@@ -957,7 +957,7 @@ def scatterplot(X, Y, color, figsize=(9,5), n_xticks=10, n_yticks=10, x_rotation
     plt.title(label = 'Scatter'+' - '+ X.name + '-' + Y.name, fontsize=15)
     
     if save == True :
-        fig.savefig(file_name + '.jpg', format='jpg', dpi=600, bbox_inches="tight")
+        fig.savefig(file_name + '.jpg', format='jpg', dpi=600, bbox_inches="tight", pad_inches=0.2)
     
     plt.show()
 
@@ -968,7 +968,7 @@ def scatterplot_matrix(df, n_cols, title, figsize=(15,15), auto_col=False,
                      response=None, predictors=None,
                      quant_col_names=[], remove_columns=[], add_columns=[], xlabel_size=10, ylabel_size=10,
                      n_xticks=10, n_yticks=10, title_fontsize=15, subtitles_fontsize=12, save=False, file_name=None, 
-                     random=False, n=None, fraction=None, seed=123, x_rotation=0, y_rotation=0,
+                     random=False, n=None, fraction=None, seed=123, x_rotation=0, y_rotation=0, title_weight='bold',
                      title_height=0.95, style='whitegrid', hspace=1, wspace=0.2, n_round_xticks=2, n_round_yticks=2) :
  
     """
@@ -1059,13 +1059,13 @@ def scatterplot_matrix(df, n_cols, title, figsize=(15,15), auto_col=False,
         fig.delaxes(axes[j])
 
     # Establishing a general tittle for the plot.
-    plt.suptitle(title, fontsize=title_fontsize, y=title_height)
+    plt.suptitle(title, fontsize=title_fontsize, y=title_height, weight=title_weight)
     
     plt.subplots_adjust(hspace=hspace, wspace=wspace) 
 
     # Setting save options.
     if save == True :         
-        fig.savefig(file_name + '.jpg', format='jpg', dpi=500)
+        fig.savefig(file_name + '.jpg', format='jpg', dpi=500, bbox_inches="tight", pad_inches=0.2)
 
     plt.show()  
 
@@ -1295,7 +1295,7 @@ def stripplot(df, X_name, Y_name, color, jitter=0.15, figsize=(9,5), n_yticks=10
                       ncol=n_statistics, fontsize=legend_size)
 
     if save == True :
-        fig.savefig(file_name + '.jpg', format='jpg', dpi=600, bbox_inches="tight")
+        fig.savefig(file_name + '.jpg', format='jpg', dpi=600, bbox_inches="tight", pad_inches=0.2)
     
     plt.show()
 
@@ -1310,7 +1310,7 @@ def stripplot_matrix(df, n_cols, title, figsize=(15,15), auto_col=False,
                      random=False, n=None, fraction=None, seed=123, x_rotation=0, y_rotation=0,
                      title_height=0.95, style='whitegrid', hspace=1, wspace=0.2, statistics=None, lines_width=0.5, 
                      bbox_to_anchor=(0.5,-1), legend_size=9, color_stats=None, n_round_yticks=2,
-                     xlabel_size=10, ylabel_size=10) :
+                     xlabel_size=10, ylabel_size=10, title_weight='bold') :
  
     """
     Parameters (inputs)
@@ -1437,7 +1437,7 @@ def stripplot_matrix(df, n_cols, title, figsize=(15,15), auto_col=False,
         fig.delaxes(axes[j])
 
     # Establishing a general tittle for the plot.
-    plt.suptitle(title, fontsize=title_fontsize, y=title_height)
+    plt.suptitle(title, fontsize=title_fontsize, y=title_height, weight=title_weight)
     
     plt.subplots_adjust(hspace=hspace, wspace=wspace) 
 
@@ -1446,7 +1446,7 @@ def stripplot_matrix(df, n_cols, title, figsize=(15,15), auto_col=False,
 
     # Setting save options.
     if save == True :         
-        fig.savefig(file_name + '.jpg', format='jpg', dpi=500)
+        fig.savefig(file_name + '.jpg', format='jpg', dpi=500, bbox_inches="tight", pad_inches=0.2)
 
     plt.show()  
 
@@ -1756,11 +1756,12 @@ def boxplot_2D(df, X_name, Y_name, color, figsize=(9,5), n_yticks=10, x_rotation
                #stats_labels.append(f'mean_{Y_name}_{X_name}={cat}') 
 
         handles, _ = p.get_legend_handles_labels()
-        plt.legend(handles=handles, labels=statistics,  loc='lower center', bbox_to_anchor=bbox_to_anchor, 
-                      ncol=n_statistics, fontsize=legend_size)
+        plt.legend(handles=handles, labels=statistics, loc='lower center', 
+                   bbox_to_anchor=bbox_to_anchor, 
+                   ncol=n_statistics, fontsize=legend_size)
 
     if save == True :
-        fig.savefig(file_name + '.jpg', format='jpg', dpi=600, bbox_inches="tight")
+        fig.savefig(file_name + '.jpg', format='jpg', dpi=600, bbox_inches="tight", pad_inches=0.2)
     
     plt.show()
 
@@ -1771,7 +1772,7 @@ def boxplot_2D_matrix(df, n_cols, title, figsize=(15,15), auto_col=False,
                      quant_col_names=[], cat_col_names=[], remove_quant_col=[], add_quant_col=[], 
                      remove_cat_col=[], add_cat_col=[], n_yticks=10, xlabel_size=10, ylabel_size=10,
                      title_fontsize=15, subtitles_fontsize=12, save=False, file_name=None, 
-                     random=False, n=None, fraction=None, seed=123, x_rotation=0, y_rotation=0,
+                     random=False, n=None, fraction=None, seed=123, x_rotation=0, y_rotation=0, title_weight='bold',
                      title_height=0.95, style='whitegrid', hspace=1, wspace=0.2, statistics=None, lines_width=0.5, 
                      bbox_to_anchor=(0.5,-1), legend_size=9, color_stats=None, showfliers = True, n_round_yticks=2) :
  
@@ -1902,13 +1903,13 @@ def boxplot_2D_matrix(df, n_cols, title, figsize=(15,15), auto_col=False,
         fig.delaxes(axes[j])
 
     # Establishing a general tittle for the plot.
-    plt.suptitle(title, fontsize=title_fontsize, y=title_height)
+    plt.suptitle(title, fontsize=title_fontsize, y=title_height, weight=title_weight)
     
     plt.subplots_adjust(hspace=hspace, wspace=wspace) 
 
     # Setting save options.
     if save == True :         
-        fig.savefig(file_name + '.jpg', format='jpg', dpi=500)
+        fig.savefig(file_name + '.jpg', format='jpg', dpi=500, bbox_inches="tight", pad_inches=0.2)
 
     plt.show()  
 
@@ -1967,7 +1968,7 @@ def histogram_2D(df, quant_column, cat_column, bins=10, figsize=(9,5), n_yticks=
     plt.title(label = 'Histogram '+' - '+ quant_column + ' vs ' + cat_column, fontsize=15)
 
     if save == True :
-        fig.savefig(file_name + '.jpg', format='jpg', dpi=600, bbox_inches="tight")
+        fig.savefig(file_name + '.jpg', format='jpg', dpi=600, bbox_inches="tight", pad_inches=0.2)
     
     plt.show()
 
@@ -1981,7 +1982,7 @@ def histogram_2D_matrix(df, bins, n_cols, title, figsize=(15,15), auto_col=False
                      random=False, n=None, fraction=None, seed=123, x_rotation=0, 
                      title_height=0.95, style='whitegrid', hspace=1, wspace=0.2,   
                      bbox_to_anchor=(1,1), legend_size=10, transparency=0.8,
-                     xlabel_size=10, ylabel_size=10) :
+                     xlabel_size=10, ylabel_size=10, title_weight='bold') :
  
     """
     Parameters (inputs)
@@ -2081,13 +2082,13 @@ def histogram_2D_matrix(df, bins, n_cols, title, figsize=(15,15), auto_col=False
         fig.delaxes(axes[j])
 
     # Establishing a general tittle for the plot.
-    plt.suptitle(title, fontsize=title_fontsize, y=title_height)
+    plt.suptitle(title, fontsize=title_fontsize, y=title_height, weight=title_weight)
     
     plt.subplots_adjust(hspace=hspace, wspace=wspace) 
 
     # Setting save options.
     if save == True :         
-        fig.savefig(file_name + '.jpg', format='jpg', dpi=500)
+        fig.savefig(file_name + '.jpg', format='jpg', dpi=500, bbox_inches="tight", pad_inches=0.2)
 
     plt.show()  
 
@@ -2143,10 +2144,10 @@ def ecdfplot_2D(df, quant_column, cat_column, complementary=False, figsize=(9,5)
     p.legend(handles=patches, title=cat_column, loc='upper right', bbox_to_anchor=bbox_to_anchor, fontsize=legend_size)
     
     # Setting the title of the plot.
-    plt.title(label = 'Ecdfplot'+' - '+ quant_column + ' vs ' + cat_column, fontsize=15)
+    plt.title(label = 'Ecdfplot'+' - '+ quant_column + ' vs ' + cat_column, fontsize=15, weight=title_weight)
 
     if save == True :
-        fig.savefig(file_name + '.jpg', format='jpg', dpi=600, bbox_inches="tight")
+        fig.savefig(file_name + '.jpg', format='jpg', dpi=600, bbox_inches="tight", pad_inches=0.2)
     
     plt.show()
 
@@ -2160,7 +2161,7 @@ def ecdfplot_2D_matrix(df, n_cols, title, complementary=False, figsize=(15,15), 
                      random=False, n=None, fraction=None, seed=123, x_rotation=0, 
                      title_height=0.95, style='whitegrid', hspace=1, wspace=0.2,   
                      bbox_to_anchor=(1,1), legend_size=10, transparency=0.8,
-                     xlabel_size=10, ylabel_size=10) :
+                     xlabel_size=10, ylabel_size=10, title_weight='bold') :
  
     """
     Parameters (inputs)
@@ -2260,13 +2261,13 @@ def ecdfplot_2D_matrix(df, n_cols, title, complementary=False, figsize=(15,15), 
         fig.delaxes(axes[j])
 
     # Establishing a general tittle for the plot.
-    plt.suptitle(title, fontsize=title_fontsize, y=title_height)
+    plt.suptitle(title, fontsize=title_fontsize, y=title_height, weight=title_weight)
     
     plt.subplots_adjust(hspace=hspace, wspace=wspace) 
 
     # Setting save options.
     if save == True :         
-        fig.savefig(file_name + '.jpg', format='jpg', dpi=500)
+        fig.savefig(file_name + '.jpg', format='jpg', dpi=500, bbox_inches="tight", pad_inches=0.2)
 
     plt.show()  
 
@@ -2278,7 +2279,7 @@ def ecdfplot_2D_matrix(df, n_cols, title, complementary=False, figsize=(15,15), 
 
 def barplot_2D(df, cat_condition, cat_conditioned, n_rows, figsize, title, title_size, subtitles_size, title_height, 
                xlabel_size=10, xticks_size=9, hspace=1, wspace=0.5, palette='tab10', ylabel_size=11, x_rotation=0,
-               max_ytick=1, title_weight='bold', categories_order=None, bar_width=0.4, alpha=1):
+               max_ytick=1, title_weight='bold', categories_order=None, bar_width=0.4, alpha=1, save=False, file_name=''):
     
     # Condition variable: cat_condition
     # Conditioned variable:cat_response
@@ -2320,6 +2321,8 @@ def barplot_2D(df, cat_condition, cat_conditioned, n_rows, figsize, title, title
     plt.subplots_adjust(hspace=hspace, wspace=wspace) 
     for j in range(n_categories, n_rows * n_cols):
         fig.delaxes(axes[j])
+    if save == True :         
+        fig.savefig(file_name + '.jpg', format='jpg', dpi=500, bbox_inches="tight", pad_inches=0.2)
     plt.show()
 
 ##########################################################################################
