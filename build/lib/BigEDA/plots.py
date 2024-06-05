@@ -1853,7 +1853,7 @@ def boxplot_2D_matrix(df, n_cols, title, figsize=(15,15), auto_col=False,
         X = df.select(col1).to_numpy().flatten()
         Y = df.select(col2).to_numpy().flatten()
         sns.boxplot(x=X, y=Y, color=color, showfliers=showfliers, ax=ax)
-        ax.set_title(col2 + ' vs ' + col1, fontsize=subtitles_fontsize)
+        ax.set_title(col2 + ' | ' + col1, fontsize=subtitles_fontsize)
         if showfliers == True :
             Y_min = np.floor(df[col2].min())
             Y_max = np.ceil(df[col2].max())
