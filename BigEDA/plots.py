@@ -2277,8 +2277,8 @@ def ecdfplot_2D_matrix(df, n_cols, title, complementary=False, figsize=(15,15), 
 # Useful when the response is categorical and we want to analyze the influence of categorical predictors on it.
 
 
-def barplot_2D(df, cat_condition, cat_conditioned, n_rows, figsize, title, title_size, subtitles_size, title_height, 
-               xlabel_size=10, xticks_size=9, hspace=1, wspace=0.5, palette='tab10', ylabel_size=11, x_rotation=0,
+def barplot_2D(df, cat_condition, cat_conditioned, n_rows, figsize, title=None, title_size=14, subtitles_size=12, 
+               title_height=0.98, xlabel_size=10, xticks_size=9, hspace=1, wspace=0.5, palette='tab10', ylabel_size=11, x_rotation=0,
                max_ytick=1, title_weight='bold', categories_order=None, bar_width=0.4, alpha=1, save=False, file_name=''):
     
     # Condition variable: cat_condition
@@ -2436,6 +2436,126 @@ def barplot_interactive_2D(df, x, y, figsize=(800,600), font_family='Comic Sans 
 
 ##########################################################################################
 
+
+def barplot_interactive_2D_multiplot(df, x, y, figsize=(800,600), font_family='Comic Sans MS', 
+                        xlabel=None, xlabel_size=12, ylabel=None, ylabel_size=12, xticks_size=10, yticks_size=10, 
+                        n_cols=2, wspace=0.5, hspace=0.5, subtitle_size=15,
+                        margin_l=50, margin_r=40, margin_t=60, margin_b=50, orientation='h',
+                        title=None, title_size=20, title_width=0.5, title_height=1.08):
+    
+    y_categories = df[y].unique()
+    n_subplots = len(y_categories)
+    n_rows = int(np.ceil(n_subplots / n_cols))
+    colors = (px.colors.qualitative.Plotly +
+              px.colors.qualitative.D3 +
+              px.colors.qualitative.Pastel +
+              px.colors.qualitative.Set3)[:n_subplots]
+    fig = make_subplots(rows=n_rows, cols=n_cols, shared_xaxes=False, shared_yaxes=False,
+                        subplot_titles=[f"{cat}" for cat in y_categories],
+                        vertical_spacing=hspace, horizontal_spacing=wspace)
+
+    for i, cat in enumerate(y_categories):
+        df_to_plot = df.filter(pl.col(y) == cat).to_pandas()
+        if orientation == 'v':
+            bar_fig = px.bar(df_to_plot, x='percentage')
+        elif orientation == 'h':
+            bar_fig = px.bar(df_to_plot, y='percentage', x=x)
+        bar_fig.update_traces(marker_color=colors[i])
+        row = (i // n_cols) + 1
+        col = (i % n_cols) + 1
+        for trace in bar_fig['data']:
+            fig.add_trace(trace, row=row, col=col)
+        fig.update_xaxes(title_text=xlabel if xlabel != None else y, row=row, col=col, title_font=dict(family=font_family, size=xlabel_size, color="black"))
+        fig.update_yaxes(title_text=ylabel if ylabel != None else x, row=row, col=col, title_font=dict(family=font_family, size=ylabel_size, color="black"))
+
+        # Remove the y-axis labels for the right subplots
+        if col > 1:
+            fig.update_yaxes(title_text='', row=row, col=col)
+        if row < n_rows:
+            fig.update_xaxes(title_text='', row=row, col=col)
+
+    if title is None:
+        title = f'<b>Conditional Barplot - {x} | {y}<b>'
+
+    # Adjust the plot size
+    fig.update_layout(
+        width=figsize[0],  # width of the plot in pixels
+        height=figsize[1],  # height of the plot in pixels
+        margin=dict(l=margin_l, r=margin_r, t=margin_t + 40, b=margin_b)  # increase top margin for title
+    )
+
+    # Ensure subplot titles are not overridden
+    annotations = list(fig['layout']['annotations'])
+    annotations.append(
+        dict(
+            text=title,
+            x=title_width,
+            y=title_height,  # Position above the subplots
+            xref='paper',
+            yref='paper',
+            showarrow=False,
+            font=dict(
+                family=font_family,
+                size=title_size,
+                color="black"
+            )
+        )
+    )
+    fig.update_layout(annotations=annotations)
+    
+    # Explicitly update subplot title sizes
+    for annotation in fig['layout']['annotations']:
+        for cat in y_categories:
+            if 'text' in annotation and cat in annotation['text']:
+                annotation['font']['size'] = subtitle_size
+                annotation['font']['family'] = font_family
+                annotation['font']['color'] = 'black'
+
+    fig.update_layout(
+        plot_bgcolor='white'
+    )
+
+    fig.update_xaxes(
+        mirror=True,
+        ticks='outside',
+        showline=True,
+        linecolor='black',
+        gridcolor='lightgrey',
+        tickfont=dict(
+            family=font_family,
+            size=xticks_size,
+            color='black'
+        )
+    )
+
+    fig.update_yaxes(
+        mirror=True,
+        ticks='outside',
+        showline=True,
+        linecolor='black',
+        gridcolor='white',
+        automargin=True,
+        title_standoff=20,
+        tickfont=dict(
+            family=font_family,
+            size=yticks_size,
+            color='black'
+        )
+    )
+
+    # Add hover label styling
+    fig.update_layout(
+        hoverlabel=dict(
+            bgcolor="white",
+            bordercolor="black",
+            font_size=12,
+            font_family=font_family,
+            font_color="black"
+        )
+    )
+    
+    return fig
+"""
 def barplot_interactive_2D_multiplot(df, x, y, figsize=(800,600), font_family='Comic Sans MS', 
                         xlabel=None, xlabel_size=12, ylabel_size=12, xticks_size=10, yticks_size=10, 
                         n_cols=2, wspace=0.5, hspace=0.5, subtitle_size=15,
@@ -2548,7 +2668,7 @@ def barplot_interactive_2D_multiplot(df, x, y, figsize=(800,600), font_family='C
     )
     
     return fig
-
+"""
 ##########################################################################################
 
 def map_interactive(geojson, locations, z, featureidkey, colorscale, marker_opacity, marker_line_width, mapbox_zoom,
